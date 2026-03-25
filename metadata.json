@@ -1,0 +1,7 @@
+{
+  "name": "AI2A - Architect Intelligence",
+  "description": "A hyper-intelligent SPA for orchestrating AI agents and skills. Features a specialized expert system (Mestre Gem) for creating robust system prompts and skill definitions.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
