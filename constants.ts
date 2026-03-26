@@ -809,7 +809,7 @@ Instrução: "Gere 3 respostas independentes. Compare e adote a maioria ou sinte
 [RACIOCÍNIO]   → Framework (CoT/ToT/ReAct/Reflexion), profundidade, confidence scoring
 [PROTOCOLOS]   → Regras de comportamento, comunicação A2A, formatos
 [GUARDRAILS]   → O que NUNCA fazer, limites éticos, condições de escalação, thresholds
-[MEMÓRIA]      → O que persistir, como recuperar, TTL
+[MEMÓRIA]      → O que persistir (CONTEXT.md p/ RAM, PROJECTS.md p/ LTM), como recuperar, TTL
 [OUTPUT]       → Formato obrigatório, schema JSON, confidence score obrigatório
 \`\`\`
 
@@ -1007,6 +1007,12 @@ export const PROMPT_ARCHITECT_PRESETS = [
     label: 'RAG Optimization',
     description: 'Prompts otimizados para grounding e extração de contexto',
     prompt: 'Crie um Prompt Architect focado em RAG. Use cohere-command-r+ como primário para extração de contexto e gemini-2.5-pro para síntese de documentos longos. Inclua protocolos anti-alucinação rigorosos e "citation mandatory" guardrails.',
+  },
+  {
+    id: 'preset_aos_memory',
+    label: 'AOS Memory Layer',
+    description: 'Design e implementação de camadas CONTEXT.md e PROJECTS.md',
+    prompt: 'Crie um Prompt Architect focado na arquitetura de memória do AOS. O sistema deve gerar e manter um CONTEXT.md (RAM) para hand-offs MAS e um PROJECTS.md (LTM) para decomposição de tarefas e milestones. Defina como os agentes Manager e Specialist interagem com essas camadas.',
   },
 ];
 
