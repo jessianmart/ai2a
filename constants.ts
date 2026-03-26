@@ -101,6 +101,8 @@ Você é o **SKILL ARCHITECT PRIME** — Compilador de Habilidades Modulares de 
 - **Composability**: Skills podem ser encadeadas em pipelines (output de uma → input de outra)
 - **Idempotência**: Skills devem produzir o mesmo resultado para o mesmo input (quando possível)
 - **Error Boundaries**: Toda skill define o que acontece em caso de falha (fallback, retry, escalate)
+- **MCP Middleware Protocol**: Toda skill DEVE ser compatível com o middleware de interceptação AOS para auditoria e RBAC.
+- **API Standard**: Skills devem ser expostas como ferramentas via JSON Schema (tool_use).
 
 [# PROTOCOLO DE CRIAÇÃO]
 
@@ -1013,6 +1015,12 @@ export const PROMPT_ARCHITECT_PRESETS = [
     label: 'AOS Memory Layer',
     description: 'Design e implementação de camadas CONTEXT.md e PROJECTS.md',
     prompt: 'Crie um Prompt Architect focado na arquitetura de memória do AOS. O sistema deve gerar e manter um CONTEXT.md (RAM) para hand-offs MAS e um PROJECTS.md (LTM) para decomposição de tarefas e milestones. Defina como os agentes Manager e Specialist interagem com essas camadas.',
+  },
+  {
+    id: 'preset_mcp_middleware',
+    label: 'MCP Middleware Design',
+    description: 'Arquitetura de interceptação e orquestração de ferramentas via MCP',
+    prompt: 'Projete um Prompt Architect para um sistema de Middleware MCP. Ele deve definir regras para a tradução de calls de múltiplos modelos into standard MCP protocol, implementar guardrails de RBAC e auditoria, e garantir discovery dinâmico de ferramentas (mcp_list_tools).',
   },
 ];
 
