@@ -1,12 +1,10 @@
 import { GoogleGenAI, ChatSession, GenerateContentResponse } from "@google/genai";
 import { Mode } from '../types';
-import { SYSTEM_PROMPT_AGENT, SYSTEM_PROMPT_SKILL } from '../constants';
+import { MODE_CONFIG } from '../constants';
 
-// We manage the chat instance here to keep context
 let chatInstance: ChatSession | null = null;
 let currentMode: Mode | null = null;
 
-// Helper to get fresh instance
 const getAI = () => new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export const resetChat = () => {
@@ -20,16 +18,18 @@ export const sendMessageStream = async (
   onChunk: (text: string) => void
 ): Promise<string> => {
   const ai = getAI();
-  
-  // Initialize or Reset chat if mode changed
+
   if (!chatInstance || currentMode !== mode) {
-    const systemInstruction = mode === Mode.AGENT_ARCHITECT ? SYSTEM_PROMPT_AGENT : SYSTEM_PROMPT_SKILL;
-    
+    const config = MODE_CONFIG[mode];
+
     chatInstance = ai.chats.create({
-      model: 'gemini-3-flash-preview', // High speed, good reasoning
+      model: 'gemini-2.0-flash',
       config: {
-        systemInstruction: systemInstruction,
-        temperature: 0.7, // Creativity balance
+        systemInstruction: config.prompt,
+        temperature: 0.75,
+        topP: 0.95,
+        topK: 40,
+        maxOutputTokens: 8192,
       }
     });
     currentMode = mode;
@@ -51,5 +51,19 @@ export const sendMessageStream = async (
   } catch (error) {
     console.error("Gemini API Error:", error);
     throw error;
+  }
+};
+
+/**
+ * Extract JSON config from a model response.
+ * Looks for the first ```json ... ``` block and parses it.
+ */
+export const extractJsonFromResponse = (text: string): Record<string, unknown> | null => {
+  const match = text.match(/```json\s*\n([\s\S]*?)```/);
+  if (!match?.[1]) return null;
+  try {
+    return JSON.parse(match[1].trim());
+  } catch {
+    return null;
   }
 };
